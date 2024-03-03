@@ -2,3 +2,5 @@ name: RandomVouchers
 version: '${project.version}'
 main: com.tecana.randomvouchers.RandomVouchers
 api-version: '1.19'
+commands:
+  randomvoucher:

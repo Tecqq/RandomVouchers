@@ -1,17 +1,28 @@
 package com.tecana.randomvouchers;
 
+import com.tecana.randomvouchers.commands.CmdBase;
+import com.tecana.randomvouchers.commands.CommandManager;
+import com.tecana.randomvouchers.events.EventPlayerInteract;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class RandomVouchers extends JavaPlugin {
 
+    public CommandManager commandManager;
+    private VTypeManager vTypeManager;
+
+    public static RandomVouchers instance;
     @Override
     public void onEnable() {
-        // Plugin startup logic
-
+        instance = this;
+        saveDefaultConfig();
+        commandManager = new CommandManager();
+        vTypeManager = new VTypeManager();
+        getCommand("randomvoucher").setExecutor(new CmdBase());
+        getServer().getPluginManager().registerEvents(new EventPlayerInteract(), this);
     }
 
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
+    public VTypeManager getVTypeManager() {
+        return vTypeManager;
     }
+
 }

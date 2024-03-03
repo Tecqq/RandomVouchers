@@ -4,37 +4,46 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class RTypeManager {
+public class VTypeManager {
 
-    private final HashMap<String, BType> bTypeMap = new HashMap<>();
+    private final HashMap<String, VType> vTypeMap = new HashMap<>();
 
-    public RTypeManager() {
-        loadCTypes();
+    public VTypeManager() {
+        loadVTypes();
     }
 
-    private void loadCTypes() {
-        ConfigurationSection cTypesSection = Blueprints.instance.getConfig().getConfigurationSection("blueprints");
+    private void loadVTypes() {
+        ConfigurationSection cTypesSection = RandomVouchers.instance.getConfig().getConfigurationSection("randomvouchers");
 
         if (cTypesSection != null) {
             for (String key : cTypesSection.getKeys(false)) {
                 ConfigurationSection specificTypeSection = cTypesSection.getConfigurationSection(key);
                 if (specificTypeSection != null) {
-
+                    String material = specificTypeSection.getString("material");
                     String displayname = specificTypeSection.getString("displayname");
                     List<String> lore = specificTypeSection.getStringList("lore");
-                    String schematic = specificTypeSection.getString("schematic");
-                    int blockspersecond = specificTypeSection.getInt("blockspersecond");
-                    String title = specificTypeSection.getString("title");
-
-                    BType cType = new BType(key, displayname, lore, schematic, blockspersecond, title);
-                    bTypeMap.put(key, cType);
+                    ConfigurationSection rewardsSection = specificTypeSection.getConfigurationSection("rewards");
+                    Map<Integer, Reward> rewards = new HashMap<>();
+                    if (rewardsSection != null) {
+                        for (String rewardKey : rewardsSection.getKeys(false)) {
+                            ConfigurationSection rewardSection = rewardsSection.getConfigurationSection(rewardKey);
+                            if (rewardSection != null) {
+                                String command = rewardSection.getString("command");
+                                String message = rewardSection.getString("message");
+                                rewards.put(Integer.parseInt(rewardKey), new Reward(command, message));
+                            }
+                        }
+                    }
+                    VType vType = new VType(key, material, displayname, lore, rewards);
+                    vTypeMap.put(key, vType);
                 }
             }
         }
     }
 
-    public BType getBTypeByName(String name) {
-        return bTypeMap.get(name);
+    public VType getVTypeByName(String name) {
+        return vTypeMap.get(name);
     }
 }

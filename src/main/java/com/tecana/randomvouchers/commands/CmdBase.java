@@ -1,6 +1,6 @@
-package com.tecana.blueprints.cmds;
+package com.tecana.randomvouchers.commands;
 
-import com.tecana.blueprints.Blueprints;
+import com.tecana.randomvouchers.RandomVouchers;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,25 +12,19 @@ public class CmdBase implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (args.length > 0) {
-            return Blueprints.instance.commandManager.executeCommand(sender, args[0], Arrays.copyOfRange(args, 1, args.length));
+            return RandomVouchers.instance.commandManager.executeCommand(sender, args[0], Arrays.copyOfRange(args, 1, args.length));
         }
-        sendHelpMessage(sender);
+        if (sender.hasPermission("randomvouchers.admin")) {
+            sendHelpMessage(sender);
+        } else {
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', RandomVouchers.instance.getConfig().getConfigurationSection("messages").getString("nopermission")));
+        }
 
         return false;
     }
-
     private void sendHelpMessage(CommandSender sender) {
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6&l---------------------------------------"));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', ""));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&e&lBlueprints &8&l→ &7Help"));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', ""));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7<> = Required"));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[] = Optional"));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', ""));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&e&lCOMMANDS:"));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6&l→ &7/blueprints give <player> <type> [amount]"));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6&l→ &7/blueprints help"));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', ""));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6&l---------------------------------------"));
+        for (String string : RandomVouchers.instance.getConfig().getConfigurationSection("messages").getStringList("helpmessage")) {
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
+        }
     }
 }

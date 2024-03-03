@@ -1,11 +1,11 @@
-package com.tecana.blueprints.cmds;
+package com.tecana.randomvouchers.commands;
 
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BCommand {
+public abstract class VCommand {
 
     protected final List<String> aliases = new ArrayList<>();
 
