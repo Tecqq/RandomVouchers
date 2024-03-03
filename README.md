@@ -1,4 +1,4 @@
-# A free highly configurable 1.8-1.20 spigot plugin allowing you to make blocks infinite for a configurable price.
+# A free highly configurable 1.8-1.20 spigot plugin allowing you to make random vouchers that give random rewards.
 
 Configuration:
 ```yml
