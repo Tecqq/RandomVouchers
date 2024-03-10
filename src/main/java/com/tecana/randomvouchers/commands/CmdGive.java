@@ -2,6 +2,7 @@ package com.tecana.randomvouchers.commands;
 
 import com.tecana.randomvouchers.RandomVouchers;
 import de.tr7zw.nbtapi.NBTItem;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -30,7 +31,7 @@ public class CmdGive extends VCommand {
         }
 
         if (sender.hasPermission("randomvouchers.admin")) {
-            NBTItem nbtItem = new NBTItem(new ItemStack(Material.getMaterial(RandomVouchers.instance.getVTypeManager().getVTypeByName(args[1]).getMaterial()), 1));
+            NBTItem nbtItem = new NBTItem(new ItemStack(Material.getMaterial(RandomVouchers.instance.getVTypeManager().getVTypeByName(args[1]).getMaterial()), Integer.parseInt(args[2])));
             nbtItem.setBoolean("randomvoucher", true);
             nbtItem.setString("randomvouchertype", RandomVouchers.instance.getVTypeManager().getVTypeByName(args[1]).getName());
             ItemStack itemStack = nbtItem.getItem();
@@ -42,7 +43,7 @@ public class CmdGive extends VCommand {
             }
             itemMeta.setLore(lore);
             itemStack.setItemMeta(itemMeta);
-            player.getInventory().addItem(itemStack);
+            Bukkit.getPlayer(args[0]).getInventory().addItem(itemStack);
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', RandomVouchers.instance.getConfig().getConfigurationSection("messages").getString("vouchergive").replace("%voucher%", RandomVouchers.instance.getVTypeManager().getVTypeByName(args[1]).getDisplayName())));
         }
         return false;
